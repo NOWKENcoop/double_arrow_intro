@@ -87,7 +87,7 @@ Les images du jeu sont placées dans un dossier `image/` situé dans le même r�
 
 
 ## Auteur
-- **Votre Nom** - NDE WILLIAM
+- **NDE WILLIAM**
 
 ## Licence
 Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
