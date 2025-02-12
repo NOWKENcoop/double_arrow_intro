@@ -86,6 +86,16 @@ character_images = [
 # Redimensionner les images
 character_images = [pygame.transform.scale(img, (100, 100)) for img in character_images]
 
+# Vitesses par difficulté
+SPEED_MULTIPLIERS = {
+    "amateur": 2,
+    "normal": 5,
+    "professionel": 8,
+    "extra": 15
+}
+
+
+
 if os.path.exists(icon_path):
     try:
         icon = pygame.image.load(icon_path)
@@ -210,6 +220,57 @@ start_color = (34, 98, 195)  # Bleu (rgba(34,98,195,0.8))
 end_color = (215, 253, 45)   # Vert-jaune (rgba(215,253,45,0.7))
 
 
+def training_mode():
+    def start_training(difficulty):
+        game_loop(training_mode=True, difficulty=difficulty)
+
+    running = True
+    while running:
+        screen.fill(WHITE)
+        title = FONT.render("Sélection de la difficulté", True, BLACK)
+        screen.blit(title, (WIDTH // 4, 50))
+
+        # Créer des boutons pour chaque niveau de difficulté
+        draw_button("Amateur", 300, 200, 200, 50, GREEN, lambda: start_training("amateur"))
+        draw_button("Normal", 300, 300, 200, 50, YELLOW, lambda: start_training("normal"))
+        draw_button("Pro", 300, 400, 200, 50, BLUE, lambda: start_training("professionel"))
+        draw_button("Extra", 300, 500, 200, 50, RED, lambda: start_training("extra"))
+        draw_button("Retour", 300, 600, 200, 50, DARK_GRAY, main_menu)
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+
+
+def help_screen():
+    running = True
+    while running:
+        screen.fill(WHITE)
+        title = FONT.render("AIDE - Commandes du jeu", True, BLACK)
+        screen.blit(title, (WIDTH // 4, 50))
+
+        help_text = [
+            "Joueur 1: W (haut), S (bas), SPACE (tirer)",
+            "Joueur 2: Haut (↑), Bas (↓), ENTER (tirer)",
+            "Mode entraînement: Adversaire automatique",
+            "Objectif: Éliminez votre adversaire avec les flèches !"
+        ]
+
+        for i, line in enumerate(help_text):
+            text = FONT.render(line, True, BLACK)
+            screen.blit(text, (100, 150 + i * 50))
+
+        draw_button("Retour", 300, 500, 200, 50,RED, main_menu)
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+
 # Fonction d'affichage du menu principal
 def main_menu():
     running = True
@@ -220,7 +281,9 @@ def main_menu():
         title = FONT.render("Double Arrows - Menu Principal", True, BLACK)
         screen.blit(title, (WIDTH // 3, 50))
         draw_button("1 VS 1", 300, 220, 200, 50, (45,55,106), game_loop)
-        draw_button("Quitter", 300, 500, 200, 50, RED, quit_game)
+        draw_button("Entraînement", 300, 300, 200, 50, (213, 130, 30), training_mode)
+        draw_button("Aide", 300, 400, 200, 50, (102, 73, 17), help_screen)
+        draw_button("Quitter", 300, 500, 200, 50, (124, 50, 65), quit_game)
         pygame.display.flip()
         
         for event in pygame.event.get():
@@ -350,13 +413,13 @@ def select_character():
                         if selected[0] and selected[1]:
                             return selected  # Retourner les choix des joueurs
 # Boucle du jeu
-
 # Boucle principale du jeu
-def game_loop():
+def game_loop(training_mode=False, difficulty="professionel"):
    
     player_images = select_character()
     player1 = Player(100, RED, pygame.K_w, pygame.K_s, pygame.K_o, player_images[0])
     player2 = Player(WIDTH - 100, BLUE, pygame.K_UP, pygame.K_DOWN, pygame.K_KP_8, player_images[1])
+    speed_multiplier = SPEED_MULTIPLIERS[difficulty]
     running=True
 
     #show_loading_screen()  # Afficher l'écran de chargement avant le menu principal
@@ -380,6 +443,14 @@ def game_loop():
 
         check_collisions(player1, player2)
 
+        if training_mode:
+            player2.y += speed_multiplier
+            if player2.y >= HEIGHT - 50 or player2.y <= 50:
+                speed_multiplier = -speed_multiplier
+            if random.randint(1, 20) == 1:
+                player2.shoot(keys)
+
+
         if player1.is_dead():
             victory_screen(BLUE)
             return
@@ -395,6 +466,10 @@ def game_loop():
         for bullet in player1.bullets + player2.bullets:
             bullet.move()
             bullet.draw()
+        
+        else:
+            player2.move(keys)
+            player2.shoot(keys)
 
         draw_button("Retour", 300, 550, 200, 50, BLUE, main_menu)
         
