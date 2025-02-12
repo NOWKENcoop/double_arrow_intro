@@ -23,7 +23,7 @@ Double Arrows est un jeu développé en Python en utilisant la bibliothèque Pyg
 ## Utilisation
 1. Exécutez le fichier principal du jeu :
    ```sh
-   python3 double_arrow.py
+   python double_arrow.py
    ```
 2. Sélectionnez vos personnages.
 3. Affrontez-vous en utilisant les touches de déplacement et de tir.
@@ -39,8 +39,9 @@ Double Arrows est un jeu développé en Python en utilisant la bibliothèque Pyg
 ## Images et ressources
 Les images du jeu doivent être placées dans un dossier `image/` situé dans le même répertoire que le script principal.
 
+
 ## Auteur
-- **Votre Nom** - NDE FOTSO WILLIAM
+- **Votre Nom** - nowken
 
 ## Licence
 Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
