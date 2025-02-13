@@ -29,6 +29,7 @@ BULLET_SPEED = 7
 HEALTH_BAR_WIDTH = 200
 HEALTH_BAR_HEIGHT = 20
 MAX_HEALTH = 100
+SHOOT_COOLDOWN =500
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Double Arrows")
@@ -89,9 +90,9 @@ character_images = [pygame.transform.scale(img, (100, 100)) for img in character
 # Vitesses par difficulté
 SPEED_MULTIPLIERS = {
     "amateur": 2,
-    "normal": 5,
-    "professionel": 8,
-    "extra": 15
+    "normal": 8,
+    "professionel": 15,
+    "extra": 22
 }
 
 
@@ -133,16 +134,22 @@ class Player:
         if keys[self.shoot_key]:
             self.bullets.append(Bullet(self.x, self.y, self.color))
 
+    def shoot_training(self):
+            bullet = Bullet(self.x, self.y, self.color)
+            self.bullets.append(bullet)
+            self.can_shoot = False
+            self.shoot_timer = SHOOT_COOLDOWN  # Temps avant le prochain tir
+
     def update(self, keys):
         self.move(keys)
 
     def take_damage(self):
         if self.current_stage == 0:
-            damage = 5
+            damage = 2
         elif self.current_stage == 1:
-            damage = 10
+            damage = 5
         else:
-            damage = 20
+            damage = 10
 
         self.health_stages[self.current_stage] = (self.health_stages[self.current_stage][0], 
                                                   self.health_stages[self.current_stage][1] - damage)
@@ -253,8 +260,8 @@ def help_screen():
         screen.blit(title, (WIDTH // 4, 50))
 
         help_text = [
-            "Joueur 1: W (haut), S (bas), SPACE (tirer)",
-            "Joueur 2: Haut (↑), Bas (↓), ENTER (tirer)",
+            "Joueur 1: W (haut), S (bas), O(tirer)",
+            "Joueur 2: Haut (UP), Bas (DOWN), 8 (tirer)",
             "Mode entraînement: Adversaire automatique",
             "Objectif: Éliminez votre adversaire avec les flèches !"
         ]
@@ -424,6 +431,7 @@ def game_loop(training_mode=False, difficulty="professionel"):
 
     #show_loading_screen()  # Afficher l'écran de chargement avant le menu principal
     
+    
     while running:
         # Afficher le fond
         screen.blit(background_image, (0, 0))
@@ -447,9 +455,8 @@ def game_loop(training_mode=False, difficulty="professionel"):
             player2.y += speed_multiplier
             if player2.y >= HEIGHT - 50 or player2.y <= 50:
                 speed_multiplier = -speed_multiplier
-            if random.randint(1, 20) == 1:
-                player2.shoot(keys)
-
+            if random.randint(1,20)==2 or random.randint(10,100)==50:
+                player2.shoot_training() 
 
         if player1.is_dead():
             victory_screen(BLUE)
