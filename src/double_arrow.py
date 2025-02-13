@@ -2,6 +2,7 @@ import pygame
 import os
 import time
 import random
+import math
 # Initialisation de Pygame
 pygame.init()
 
@@ -251,11 +252,34 @@ def training_mode():
                 running = False
 
 
+def draw_radial_gradient(surface, color1, color2):
+    """Dessine un dégradé radial de color1 au centre vers color2 sur les bords."""
+    center_x, center_y = surface.get_width() // 2, surface.get_height() // 2
+    max_radius = math.sqrt(center_x**2 + center_y**2)
+
+    for y in range(surface.get_height()):
+        for x in range(surface.get_width()):
+            # Calcul de la distance au centre
+            distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
+            ratio = distance / max_radius  # Normaliser entre 0 et 1
+
+            # Interpolation des couleurs
+            r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
+            g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
+            b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
+
+            surface.set_at((x, y), (r, g, b))
+
+# Définition des couleurs en (R, G, B)
+color_start_help = (174, 238, 231)  # rgba(174,238,231,0.96) → Opacité ignorée en Pygame
+color_end_help = (102, 97, 17)  
+
 
 def help_screen():
     running = True
     while running:
-        screen.fill(WHITE)
+        #screen.fill(WHITE)
+        draw_radial_gradient(screen, color_start_help, color_end_help)
         title = FONT.render("AIDE - Commandes du jeu", True, BLACK)
         screen.blit(title, (WIDTH // 4, 50))
 
@@ -379,7 +403,8 @@ def select_character():
     character_colors = [get_random_color() for _ in range(len(character_images))]
 
     while running:
-        screen.fill(WHITE)
+        #screen.fill(WHITE)
+        draw_gradient_2(screen, start_color, end_color)
         title = FONT.render("Sélection des personnages", True, BLACK)
         screen.blit(title, (WIDTH // 4, 50))
 
