@@ -281,12 +281,16 @@ def help_screen():
         #screen.fill(WHITE)
         draw_radial_gradient(screen, color_start_help, color_end_help)
         title = FONT.render("AIDE - Commandes du jeu", True, BLACK)
+        
         screen.blit(title, (WIDTH // 4, 50))
 
         help_text = [
             "Joueur 1: W (haut), S (bas), O(tirer)",
+            "                                       ",
             "Joueur 2: Haut (UP), Bas (DOWN), 8 (tirer)",
+            "                                       ",
             "Mode entraînement: Adversaire automatique",
+            "                                       ",
             "Objectif: Éliminez votre adversaire avec les flèches !"
         ]
 
@@ -294,7 +298,7 @@ def help_screen():
             text = FONT.render(line, True, BLACK)
             screen.blit(text, (100, 150 + i * 50))
 
-        draw_button("Retour", 300, 500, 200, 50,RED, main_menu)
+        draw_button("Retour", 300, 530, 200, 50,RED, main_menu)
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -475,13 +479,13 @@ def game_loop(training_mode=False, difficulty="professionel"):
         player2.shoot(keys)
 
         check_collisions(player1, player2)
-
         if training_mode:
             player2.y += speed_multiplier
             if player2.y >= HEIGHT - 50 or player2.y <= 50:
                 speed_multiplier = -speed_multiplier
             if random.randint(1,20)==2 or random.randint(10,100)==50:
-                player2.shoot_training() 
+                player2.shoot_training()
+
 
         if player1.is_dead():
             victory_screen(BLUE)
