@@ -85,6 +85,16 @@ Le code utilise Pygame pour gérer l'affichage, les événements du clavier et l
 ## Images et ressources
 Les images du jeu sont placées dans un dossier `image/` situé dans le même répertoire que le script principal.
 
+## Capture d'écran
+
+> 
+    principal 
+![Capture d'écran de la simulation](https://github.com/NOWKENcoop/cartographie-lidar/blob/master/images.png)
+
+> 
+    play
+![Capture d'écran de la simulation](https://github.com/NOWKENcoop/cartographie-lidar/blob/master/images.jpeg)
+
 
 ## Auteur
 - **NDE WILLIAM**
