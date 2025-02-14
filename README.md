@@ -89,11 +89,11 @@ Les images du jeu sont placées dans un dossier `image/` situé dans le même r�
 
 > 
     principal 
-![Capture d'écran de la simulation](https://github.com/NOWKENcoop/cartographie-lidar/blob/master/images.png)
+![Capture d'écran de la simulation](https://github.com/NOWKENcoop/double_arrow_intro/blob/master/image/pro_arrow.png)
 
 > 
     play
-![Capture d'écran de la simulation](https://github.com/NOWKENcoop/cartographie-lidar/blob/master/images.jpeg)
+![Capture d'écran de la simulation](https://github.com/NOWKENcoop/double_arrow_intro/blob/master/image/pro2_arrow.png)
 
 
 ## Auteur
